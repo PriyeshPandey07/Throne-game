@@ -319,6 +319,47 @@
     @keyframes drawRoute {
         to { stroke-dashoffset: 0; }
     }
+    /* ❄️ ICE MODE */
+.ice-mode {
+    background: radial-gradient(circle at top, #00111a, #000) !important;
+    color: #cceeff !important;
+}
+
+.ice-mode header {
+    background: linear-gradient(to right, #001f3f, #000814) !important;
+}
+
+.ice-mode h2 {
+    color: #66ccff !important;
+    text-shadow: 0 0 10px #00ccff;
+}
+
+/* ❄️ Frost Overlay */
+#ice-overlay {
+    position: fixed;
+    inset: 0;
+    background: url("https://i.imgur.com/9QZ7Z7P.png") center/cover;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+/* ❄️ Snow Effect */
+.snow {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: url("https://i.imgur.com/5bGzG7H.png");
+    animation: snowFall 10s linear infinite;
+    opacity: 0;
+    z-index: 9997;
+}
+
+@keyframes snowFall {
+    from { background-position: 0 0; }
+    to { background-position: 0 1000px; }
+}
 </style>
 </head>
 
@@ -508,6 +549,74 @@ document.querySelectorAll(".war-card").forEach(card => {
 });
 </script>
 
+<script>
+    /* ❄️ SECRET EASTER EGG: WINTER IS COMING */
+
+let typed = "";
+const secret = "winteriscoming";
+
+document.addEventListener("keydown", (e) => {
+    if (e.key.length === 1) { // only letters
+        typed += e.key.toLowerCase();
+    }
+
+    if (typed.length > secret.length) {
+        typed = typed.slice(-secret.length);
+    }
+
+    if (typed === secret) {
+        activateIceMode();
+        typed = "";
+    }
+});
+
+function activateIceMode() {
+    const overlay = document.getElementById("ice-overlay");
+    const snow = document.getElementById("snow");
+
+    // Freeze effect
+    overlay.style.transition = "opacity 2s ease";
+    overlay.style.opacity = "0.8";
+
+    // Snow start
+    snow.style.opacity = "0.6";
+
+    // Apply theme
+    document.body.classList.add("ice-mode");
+
+    // Optional: lower music volume
+    const music = document.getElementById("bg-music");
+    if (music) {
+        music.volume = 0.3;
+    }
+
+    // Optional: slight screen freeze illusion
+    document.body.style.filter = "contrast(1.1) brightness(0.9)";
+
+    // Dramatic message
+const msg = document.createElement("div");
+msg.innerText = "WINTER HAS COME ❄️";
+msg.style.position = "fixed";
+msg.style.top = "50%";
+msg.style.left = "50%";
+msg.style.transform = "translate(-50%, -50%)";
+msg.style.fontSize = "3em";
+msg.style.color = "#66ccff";
+msg.style.textShadow = "0 0 30px #00ccff";
+msg.style.zIndex = "10000";
+msg.style.opacity = "0";
+msg.style.transition = "opacity 2s";
+
+document.body.appendChild(msg);
+
+setTimeout(() => msg.style.opacity = "1", 100);
+setTimeout(() => msg.style.opacity = "0", 4000);
+}
+
+</script>
+
+
+
 
 <section class="map">
     <h2><strong>Jon Snow aka Aegon Targaryen, a central protagonist known for his honor, bravery, and eventual discovery as the legitimate son of Rhaegar Targaryen and Lyanna Stark</strong></h2>
@@ -533,6 +642,9 @@ document.querySelectorAll(".war-card").forEach(card => {
     <h2><strong>Jaime Lannister, a complex, skilled, and initially arrogant kingsguard knight."</strong></h2>
     <img src="/images/jaime.png" alt="Map of the Seven Kingdoms">
 </section>
+
+<div id="ice-overlay"></div>
+<div class="snow" id="snow"></div>
 
 </body>
 </html>
